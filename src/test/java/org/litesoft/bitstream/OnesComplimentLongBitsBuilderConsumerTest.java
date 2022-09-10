@@ -57,24 +57,23 @@ class OnesComplimentLongBitsBuilderConsumerTest {
         OnesComplimentLongBitsConsumer consumer = new OnesComplimentLongBitsConsumer( value );
         OnesComplimentLongBitsBuilder builder = new OnesComplimentLongBitsBuilder().withSignBit( consumer.getSignBit() );
 
-        builder.add1bit( consumer.remove1bit() )
+        builder.add1bit( consumer.remove1bit() ) // 1-21
                 .add2bits( consumer.remove2bits() )
                 .add4bits( consumer.remove4bits() )
                 .add6bits( consumer.remove6bits() )
                 .add8bits( consumer.remove8bits() );
-        // 21 bits
-        builder.add2bits( consumer.remove2bits() )
+
+        builder.add2bits( consumer.remove2bits() ) // 22-42
                 .add4bits( consumer.remove4bits() )
                 .add1bit( consumer.remove1bit() )
                 .add6bits( consumer.remove6bits() )
                 .add8bits( consumer.remove8bits() );
-        // 42 bits
-        builder.add8bits( consumer.remove8bits() )
+
+        builder.add8bits( consumer.remove8bits() ) // 43-63
                 .add6bits( consumer.remove6bits() )
                 .add4bits( consumer.remove4bits() )
                 .add2bits( consumer.remove2bits() )
                 .add1bit( consumer.remove1bit() );
-        // 63 bits
 
         assertEquals( value, builder.getValue() );
     }
