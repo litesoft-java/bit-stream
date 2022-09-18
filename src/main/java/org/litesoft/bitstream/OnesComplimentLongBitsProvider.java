@@ -5,21 +5,37 @@ package org.litesoft.bitstream;
  * the lower to higher significant bits (repeatedly) of the value of an internal
  * Ones-Compliment Long representation (separate signbit from <code>value</code> bits - 0-Long.MAX_VALUE).
  */
-public class OnesComplimentLongBitsConsumer {
+public class OnesComplimentLongBitsProvider implements BitStreamProvider {
     private final boolean wasNegative;
     private long value;
+    private int remainingSignificantBits;
 
     /**
      * Constructor.
      *
      * @param value Twos Compliment
      */
-    public OnesComplimentLongBitsConsumer( long value ) {
+    public OnesComplimentLongBitsProvider( long value ) {
         wasNegative = (value < 0);
         if ( wasNegative ) {
             value = (value == Long.MIN_VALUE) ? 0 : -value; // max negative value -> 0 OR simply switch to positive!
         }
         this.value = value;
+        long mask = 1;
+        for ( int i = 1; i < 64; i++ ) {
+            if ( 0 != (value & mask) ) {
+                remainingSignificantBits = i;
+            }
+            mask += mask; // next bit
+        }
+    }
+
+    /**
+     * Returns the remaining significant bits of the positive value (0 to 63)!
+     */
+    @Override
+    public int availableBits() {
+        return remainingSignificantBits;
     }
 
     /**
@@ -44,53 +60,18 @@ public class OnesComplimentLongBitsConsumer {
     }
 
     /**
-     * Remove 1 bit from the Stream.
+     * Remove <code>N</code> 'lower' bits from the Long.
      *
-     * @return int of either 0 ot 1
+     * @param n count of the bits to remove (from 1 - 8, inclusive).
+     * @return int with range 0 thru 2^Nth - 1
+     * @throws IllegalStateException if <code>n</code> not between 1 - 8, inclusive
      */
-    public int remove1bit() {
-        return extractLowerBits( 1 );
-    }
-
-    /**
-     * Remove 2 bits from the Stream.
-     *
-     * @return int with range 0 thru 3
-     */
-    public int remove2bits() {
-        return extractLowerBits( 2 );
-    }
-
-    /**
-     * Remove 4 bits from the Stream.
-     *
-     * @return int with range 0 thru 15
-     */
-    public int remove4bits() {
-        return extractLowerBits( 4 );
-    }
-
-    /**
-     * Remove 6 bits from the Stream.
-     *
-     * @return int with range 0 thru 63
-     */
-    public int remove6bits() {
-        return extractLowerBits( 6 );
-    }
-
-    /**
-     * Remove 8 bits from the Stream.
-     *
-     * @return int with range 0 thru 255
-     */
-    public int remove8bits() {
-        return extractLowerBits( 8 );
-    }
-
-    private int extractLowerBits( int count ) {
-        long bits = value & BitStream.MASKS[count];
-        value = value >> count; // drop low bits
+    @Override
+    public int removeNbits( int n ) {
+        int mask = Nbits.removeNbits( 63, this, n );
+        long bits = value & mask;
+        value = value >> n; // drop low bits
+        remainingSignificantBits = Math.max( 0, remainingSignificantBits - n );
         return (int)bits;
     }
 }

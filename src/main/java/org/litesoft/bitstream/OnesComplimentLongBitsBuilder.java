@@ -4,7 +4,8 @@ package org.litesoft.bitstream;
  * Support building TwosCompliment Long from a Ones-Compliment representation
  * (separate signbit from <code>value</code> bits - 0-Long.MAX_VALUE) by <code>add</code>ing (appending) bits.
  */
-public class OnesComplimentLongBitsBuilder {
+public class OnesComplimentLongBitsBuilder implements BitStreamBuilder<OnesComplimentLongBitsBuilder>,
+                                                      BitConstants {
     private boolean negative;
     private int bitCount;
     private long value;
@@ -57,59 +58,30 @@ public class OnesComplimentLongBitsBuilder {
     }
 
     /**
-     * Add 1 bit.
+     * Add <code>N</code> bits.
      *
-     * @param bits integer of the bits where only the least significant 1 is used.
+     * @param n    count of the bits to add (from 1 - 8, inclusive).
+     * @param bits integer of the bits where only the least significant <code>N</code> are used (but in the most to the least significant order).
      * @return this for chaining
+     * @throws IllegalStateException if <code>n</code> not between 1 - 8, inclusive OR there is insufficient room for the bits
      */
-    public OnesComplimentLongBitsBuilder add1bit( int bits ) {
-        return append( 1, bits );
-    }
-
-    /**
-     * Add 2 bits.
-     *
-     * @param bits integer of the bits where only the least significant 2 are used (but in the most to the least significant order).
-     * @return this for chaining
-     */
-    public OnesComplimentLongBitsBuilder add2bits( int bits ) {
-        return append( 2, bits );
-    }
-
-    /**
-     * Add 4 bits.
-     *
-     * @param bits integer of the bits where only the least significant 4 are used (but in the most to the least significant order).
-     * @return this for chaining
-     */
-    public OnesComplimentLongBitsBuilder add4bits( int bits ) {
-        return append( 4, bits );
-    }
-
-    /**
-     * Add 6 bits.
-     *
-     * @param bits integer of the bits where only the least significant 6 are used (but in the most to the least significant order).
-     * @return this for chaining
-     */
-    public OnesComplimentLongBitsBuilder add6bits( int bits ) {
-        return append( 6, bits );
-    }
-
-    /**
-     * Add 8 bits.
-     *
-     * @param bits integer of the bits where only the least significant 8 are used (but in the most to the least significant order).
-     * @return this for chaining
-     */
-    public OnesComplimentLongBitsBuilder add8bits( int bits ) {
-        return append( 8, bits );
-    }
-
-    private OnesComplimentLongBitsBuilder append( int count, int bits ) {
-        long longBits = ((long)(bits & BitStream.MASKS[count])) << bitCount;
+    @Override
+    public OnesComplimentLongBitsBuilder addNbits( int n, int bits ) {
+        int newBitCount = bitCount + n;
+        if ( (1 <= n) && (n <= 8) && (newBitCount > 63)) {
+            int trialN = n - (newBitCount - 63);
+            int trialBits = (bits & MASKS[trialN]);
+            if (trialBits == bits) {
+                if ( trialN == 0 ) {
+                    return this;
+                }
+                n = trialN;
+            }
+        }
+        bits = Nbits.addNbits( bitCount, 63, this, n, bits );
+        long longBits = ((long)bits) << bitCount;
         value += longBits;
-        bitCount += count;
+        bitCount += n;
         return this;
     }
 }

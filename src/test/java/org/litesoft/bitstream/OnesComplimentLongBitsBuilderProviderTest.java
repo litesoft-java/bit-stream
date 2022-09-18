@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class OnesComplimentLongBitsBuilderConsumerTest {
+class OnesComplimentLongBitsBuilderProviderTest {
 
     @Test
     void testMIN_VALUE() {
-        OnesComplimentLongBitsConsumer consumer = new OnesComplimentLongBitsConsumer( Long.MIN_VALUE );
+        OnesComplimentLongBitsProvider consumer = new OnesComplimentLongBitsProvider( Long.MIN_VALUE );
         assertFalse( consumer.isValueNonZero() );
         assertTrue( consumer.wasNegative() );
         assertEquals( 1, consumer.getSignBit() );
@@ -20,7 +20,7 @@ class OnesComplimentLongBitsBuilderConsumerTest {
 
     @Test
     void testZero() {
-        OnesComplimentLongBitsConsumer consumer = new OnesComplimentLongBitsConsumer( 0 );
+        OnesComplimentLongBitsProvider consumer = new OnesComplimentLongBitsProvider( 0 );
         assertFalse( consumer.isValueNonZero() );
         assertFalse( consumer.wasNegative() );
         assertEquals( 0, consumer.getSignBit() );
@@ -32,7 +32,7 @@ class OnesComplimentLongBitsBuilderConsumerTest {
 
     @Test
     void testHappyCases() {
-        OnesComplimentLongBitsConsumer consumer = new OnesComplimentLongBitsConsumer( Long.MAX_VALUE );
+        OnesComplimentLongBitsProvider consumer = new OnesComplimentLongBitsProvider( Long.MAX_VALUE );
         OnesComplimentLongBitsBuilder builder = new OnesComplimentLongBitsBuilder().withSignBit( consumer.getSignBit() );
 
         builder.add8bits( validate( 255, consumer.remove8bits() ) );
@@ -42,7 +42,9 @@ class OnesComplimentLongBitsBuilderConsumerTest {
         builder.add8bits( validate( 255, consumer.remove8bits() ) );
         builder.add8bits( validate( 255, consumer.remove8bits() ) );
         builder.add8bits( validate( 255, consumer.remove8bits() ) );
-        builder.add8bits( validate( 127, consumer.remove8bits() ) );
+        // special cases for OnesComplimentLongBitsBuilder -- can add more bits than can fit, IFF additional bits are zero
+        builder.add8bits( validate( 127, consumer.remove8bits() ) ); // exceed # of bits, but excess is all zeros
+        builder.add1bit( validate( 0, consumer.remove1bit() ) ); // attempt to add 1 zero bit of an already full builder
 
         assertEquals( Long.MAX_VALUE, builder.getValue() );
 
@@ -54,7 +56,7 @@ class OnesComplimentLongBitsBuilderConsumerTest {
     }
 
     void check( long value ) {
-        OnesComplimentLongBitsConsumer consumer = new OnesComplimentLongBitsConsumer( value );
+        OnesComplimentLongBitsProvider consumer = new OnesComplimentLongBitsProvider( value );
         OnesComplimentLongBitsBuilder builder = new OnesComplimentLongBitsBuilder().withSignBit( consumer.getSignBit() );
 
         builder.add1bit( consumer.remove1bit() ) // 1-21
