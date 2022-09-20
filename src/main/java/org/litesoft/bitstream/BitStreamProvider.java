@@ -10,7 +10,7 @@ public interface BitStreamProvider {
 
     /**
      * The current bits that can be removed.
-     *
+     * <p>
      * Note: For BitStreamProviders that are not also BitStreamBuilders, the initial available bits must indicate the minimum bits extracted!
      *
      * @return never negative, but can be zero!

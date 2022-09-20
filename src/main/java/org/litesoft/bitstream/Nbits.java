@@ -12,12 +12,12 @@ class Nbits implements BitConstants {
         return MASKS[n] & bits;
     }
 
-    public static int removeNbits(  int currentBitCount, BitStreamProvider provider, int n ) {
+    public static int removeNbits( int currentBitCount, BitStreamProvider provider, int n ) {
         if ( (n < 1) || (8 < n) ) {
-            throw error( provider,"remove", n, ERROR_NOT_1_8 );
+            throw error( provider, "remove", n, ERROR_NOT_1_8 );
         }
         if ( currentBitCount < n ) {
-            throw error( provider,"remove", n,
+            throw error( provider, "remove", n,
                          ERROR_UNDER_FLOW_MID_SECTION + currentBitCount + ERROR_UNDER_FLOW_SUFFIX );
         }
         return MASKS[n];

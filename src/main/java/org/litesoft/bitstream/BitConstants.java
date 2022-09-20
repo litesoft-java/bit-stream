@@ -7,9 +7,8 @@ public interface BitConstants {
 
     String POST_CLASS_NAME_MID_SECTION = " error ";
     String ERROR_NOT_1_8 = " not between 1 and 8 (inclusive)";
-    String ERROR_OVER_FLOW_MID_SECTION = " would exceed maximum allowed Buffer size of ";
+    String ERROR_OVER_FLOW_MID_SECTION = " would exceed maximum allowed bits to add of ";
     String ERROR_OVER_FLOW_SUFFIX = " bits";
     String ERROR_UNDER_FLOW_MID_SECTION = ", but only ";
     String ERROR_UNDER_FLOW_SUFFIX = " are available";
-
 }

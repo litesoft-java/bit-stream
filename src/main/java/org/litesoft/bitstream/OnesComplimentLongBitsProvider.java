@@ -74,4 +74,46 @@ public class OnesComplimentLongBitsProvider implements BitStreamProvider {
         remainingSignificantBits = Math.max( 0, remainingSignificantBits - n );
         return (int)bits;
     }
+
+    @SuppressWarnings("unused")
+    public BitStreamSequentialSource asSequentialSource() {
+        return new OurSequentialSource( this );
+    }
+
+    private static class OurSequentialSource extends AbstractBitStreamSequentialSource {
+        private final OnesComplimentLongBitsProvider provider;
+        private int availableBits;
+        private boolean signBitConsumed = false;
+
+        public OurSequentialSource( OnesComplimentLongBitsProvider provider ) {
+            this.provider = provider;
+            availableBits = 1 + provider.availableBits();
+        }
+
+        @Override
+        protected String toStringName() {
+            return provider.getClass().getSimpleName();
+        }
+
+        @Override
+        public int availableBits() {
+            return availableBits;
+        }
+
+        @Override
+        public int removeNbits( int n ) {
+            Nbits.removeNbits( availableBits(), provider, n );
+            availableBits -= n;
+            if ( signBitConsumed ) {
+                return provider.removeNbits( n );
+            }
+            signBitConsumed = true;
+            int signBit = provider.getSignBit();
+            if ( n == 1 ) {
+                return signBit;
+            }
+            int otherBits = provider.removeNbits( --n );
+            return (signBit << n) + otherBits;
+        }
+    }
 }

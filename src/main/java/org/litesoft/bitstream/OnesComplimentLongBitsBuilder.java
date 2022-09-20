@@ -68,10 +68,10 @@ public class OnesComplimentLongBitsBuilder implements BitStreamBuilder<OnesCompl
     @Override
     public OnesComplimentLongBitsBuilder addNbits( int n, int bits ) {
         int newBitCount = bitCount + n;
-        if ( (1 <= n) && (n <= 8) && (newBitCount > 63)) {
+        if ( (1 <= n) && (n <= 8) && (newBitCount > 63) ) {
             int trialN = n - (newBitCount - 63);
             int trialBits = (bits & MASKS[trialN]);
-            if (trialBits == bits) {
+            if ( trialBits == bits ) {
                 if ( trialN == 0 ) {
                     return this;
                 }
