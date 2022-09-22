@@ -1,6 +1,6 @@
 package org.litesoft.bitstream;
 
-public abstract class AbstractBitBufferStreamSequentialSink<T> extends AbstractBitStreamSequentialSink {
+public abstract class AbstractBitBufferStreamSequentialSink<T> extends AbstractBitStreamSequentialSink<T> {
     protected final BitBuffer buffer = new BitBuffer();
     // public for testing
     public final SinkBitStream<T> sinkBitStream;
@@ -15,7 +15,7 @@ public abstract class AbstractBitBufferStreamSequentialSink<T> extends AbstractB
     }
 
     @Override
-    public final BitStreamSequentialSink addNbits( int n, int bits ) {
+    public final BitStreamSequentialSink<T> addNbits( int n, int bits ) {
         buffer.addNbits( n, Nbits.addNbits( 0, bitsCurrentlyNeeded(), this, n, bits ) );
         while ( sinkBitStream.getBitSize() <= buffer.availableBits() ) {
             sinkBitStream.addBits( buffer.removeNbits(sinkBitStream.getBitSize()) );

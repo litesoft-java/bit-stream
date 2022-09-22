@@ -2,6 +2,8 @@ package org.litesoft.bitstream;
 
 import java.nio.charset.StandardCharsets;
 
+import org.litesoft.annotations.NotNull;
+
 /**
  * Convert a Stream of utf8 <code>bytes</code>, presumably from a <code>BitStreamSequentialSource</code>, into a <code>String</code>.
  * <p>
@@ -12,10 +14,11 @@ public class StringSequentialSink extends AbstractBitBufferStreamSequentialSink<
         super( new SBS( expectedBits ) );
     }
 
-    public static StringSequentialSink ofBytes( int stringByteLength ) {
-        return new StringSequentialSink( stringByteLength * 8 );
+    public static StringSequentialSink ofBytes( int utf8BytesLength ) {
+        return new StringSequentialSink( utf8BytesLength * 8 );
     }
 
+    @Override @NotNull
     public String getValue() {
         return sinkBitStream.getValue();
     }

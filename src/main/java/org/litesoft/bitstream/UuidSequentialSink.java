@@ -2,6 +2,7 @@ package org.litesoft.bitstream;
 
 import java.util.UUID;
 
+import org.litesoft.annotations.NotNull;
 import org.litesoft.utils.Hex;
 
 import static org.litesoft.utils.UuidNonDashCharOffsets.HEX_DIGIT_OFFSETS;
@@ -14,6 +15,7 @@ public class UuidSequentialSink extends AbstractBitBufferStreamSequentialSink<UU
         super( new SBS() );
     }
 
+    @Override @NotNull
     public UUID getValue() {
         return sinkBitStream.getValue();
     }

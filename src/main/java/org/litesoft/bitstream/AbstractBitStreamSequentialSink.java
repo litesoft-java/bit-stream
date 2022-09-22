@@ -1,6 +1,6 @@
 package org.litesoft.bitstream;
 
-public abstract class AbstractBitStreamSequentialSink implements BitStreamSequentialSink {
+public abstract class AbstractBitStreamSequentialSink<T> implements BitStreamSequentialSink<T> {
     public static final String VALUE_NOT_POPULATED = "Stream error value not fully populated";
 
     public final String toString() {

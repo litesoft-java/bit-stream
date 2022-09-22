@@ -1,6 +1,9 @@
 package org.litesoft.bitstream;
 
-public interface BitStreamSequentialSink extends BitStreamBuilder<BitStreamSequentialSink> {
+public interface BitStreamSequentialSink<T> extends BitStreamBuilder<BitStreamSequentialSink<T>> {
+
+    T getValue();
+
     /**
      * @return 0-8, with 0 indicating that no more bits are needed
      * <p>
@@ -9,13 +12,4 @@ public interface BitStreamSequentialSink extends BitStreamBuilder<BitStreamSeque
      * Note-3: Under no circumstances should more bits be added then indicated by this method!
      */
     int bitsCurrentlyNeeded();
-
-    static String toStringFrom( BitStreamSequentialSink snk ) {
-        if ( snk == null ) {
-            return "null";
-        }
-        int bitsNeeded = snk.bitsCurrentlyNeeded();
-        return snk.getClass().getSimpleName() + ": " +
-               ((bitsNeeded == 0) ? "Ready" : ("at least " + bitsNeeded + " bits needed"));
-    }
 }

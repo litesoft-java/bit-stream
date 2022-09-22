@@ -8,7 +8,7 @@ class StringSequentialSourceSinkTest {
 
     @Test
     void testNullAndEmpty() {
-        assertEquals( 0, new StringSequentialSource( null ).availableBits() );
+        assertEquals( 0, new StringSequentialSource( (String)null ).availableBits() );
         assertEquals( 0, new StringSequentialSource( "" ).availableBits() );
         assertEquals( "", StringSequentialSink.ofBytes( 0 ).getValue() );
     }

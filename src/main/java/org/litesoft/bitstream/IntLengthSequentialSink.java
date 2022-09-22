@@ -1,5 +1,6 @@
 package org.litesoft.bitstream;
 
+import org.litesoft.annotations.NotNull;
 import org.litesoft.annotations.PackageFriendlyForTesting;
 
 /**
@@ -13,7 +14,8 @@ public class IntLengthSequentialSink extends AbstractBitBufferStreamSequentialSi
         super( new SBS() );
     }
 
-    public int getValue() {
+    @Override @NotNull
+    public Integer getValue() {
         return sinkBitStream.getValue();
     }
 
