@@ -15,7 +15,8 @@ public class UuidSequentialSink extends AbstractBitBufferStreamSequentialSink<UU
         super( new SBS() );
     }
 
-    @Override @NotNull
+    @Override
+    @NotNull
     public UUID getValue() {
         return sinkBitStream.getValue();
     }

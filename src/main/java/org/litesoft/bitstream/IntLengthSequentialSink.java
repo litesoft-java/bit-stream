@@ -14,7 +14,8 @@ public class IntLengthSequentialSink extends AbstractBitBufferStreamSequentialSi
         super( new SBS() );
     }
 
-    @Override @NotNull
+    @Override
+    @NotNull
     public Integer getValue() {
         return sinkBitStream.getValue();
     }

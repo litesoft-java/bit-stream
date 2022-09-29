@@ -18,7 +18,8 @@ public class StringSequentialSink extends AbstractBitBufferStreamSequentialSink<
         return new StringSequentialSink( utf8BytesLength * 8 );
     }
 
-    @Override @NotNull
+    @Override
+    @NotNull
     public String getValue() {
         return sinkBitStream.getValue();
     }
@@ -37,7 +38,7 @@ public class StringSequentialSink extends AbstractBitBufferStreamSequentialSink<
         }
 
         public String getValue() {
-            if (byteOffset < utf8Bytes.length) {
+            if ( byteOffset < utf8Bytes.length ) {
                 throw new IllegalStateException( VALUE_NOT_POPULATED );
             }
             return new String( utf8Bytes, StandardCharsets.UTF_8 );

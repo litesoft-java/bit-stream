@@ -32,8 +32,8 @@ class StringSequentialSourceSinkTest {
         StringSequentialSource src = new StringSequentialSource( toRT );
         int nBits = src.availableBits();
         StringSequentialSink snk = new StringSequentialSink( nBits );
-        for ( int n = snk.bitsCurrentlyNeeded(); n > 0 ; n = snk.bitsCurrentlyNeeded() ) {
-            snk.addNbits(n,  src.removeNbits(n) );
+        for ( int n = snk.bitsCurrentlyNeeded(); n > 0; n = snk.bitsCurrentlyNeeded() ) {
+            snk.addNbits( n, src.removeNbits( n ) );
             assertEquals( nBits -= n, src.availableBits() );
         }
         assertEquals( toRT, snk.getValue() );

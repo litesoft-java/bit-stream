@@ -11,14 +11,14 @@ public abstract class AbstractBitBufferStreamSequentialSink<T> extends AbstractB
 
     @Override
     public final int bitsCurrentlyNeeded() {
-        return sinkBitStream.bitsCurrentlyNeeded(buffer);
+        return sinkBitStream.bitsCurrentlyNeeded( buffer );
     }
 
     @Override
     public final BitStreamSequentialSink<T> addNbits( int n, int bits ) {
         buffer.addNbits( n, Nbits.addNbits( 0, bitsCurrentlyNeeded(), this, n, bits ) );
         while ( sinkBitStream.getBitSize() <= buffer.availableBits() ) {
-            sinkBitStream.addBits( buffer.removeNbits(sinkBitStream.getBitSize()) );
+            sinkBitStream.addBits( buffer.removeNbits( sinkBitStream.getBitSize() ) );
         }
         return this;
     }
@@ -41,9 +41,8 @@ public abstract class AbstractBitBufferStreamSequentialSink<T> extends AbstractB
 
         // public final boolean hasAvailableBits() {
 
-        public abstract int bitsCurrentlyNeeded(BitBuffer buffer);
+        public abstract int bitsCurrentlyNeeded( BitBuffer buffer );
 
-        public abstract void addBits(int bits); // # of bits is from the bitsSize above
+        public abstract void addBits( int bits ); // # of bits is from the bitsSize above
     }
-
 }
